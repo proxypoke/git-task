@@ -1,0 +1,25 @@
+GIT-TASK(1)
+===========
+slowpoke <mail+git@slowpoke.io>
+v0.1alpha
+
+NAME
+----
+git-task - an issue tracker for git repositories
+
+
+DESCRIPTION
+-----------
+This little script adds an issue tracker to any git repository, backed by 
+Taskwarrior, the command line todo manager. For this, it creates a new branch 
+called 'git-task', on which it automatically commits all tasks you create, 
+change, or delete.
+
+Take note that this is not a (good) replacement for a full-featured bug/issue 
+tracker, like trac or bugzilla. It's meant for small, mostly one-person projects 
+for which such a full-featured tracker would be overkill. It's also a neat way 
+to share a simple todo list with multiple people.
+
+To use this as a pseudo git-command, you can add an alias in your .gitconfig:
+
+	task = !path/to/git-task.sh

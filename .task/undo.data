@@ -18,3 +18,6 @@ new [description:"Currently only works in the git root directory. Make it work i
 time 1358262949
 new [description:"There are still some diagnostic messages slipping through. Supress them." entry:"1358262949" priority:"L" project:"FIXME" status:"pending" uuid:"2d39755e-c648-4fdf-acd9-ab9f26d02fd4"]
 ---
+time 1358263272
+new [description:"Read TASKBRANCH from the environment." entry:"1358263272" priority:"L" project:"TODO" status:"pending" uuid:"016f2cf0-ea99-41a1-8d42-33f83bda2ed8"]
+---

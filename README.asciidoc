@@ -2,10 +2,15 @@ GIT-TASK(1)
 ===========
 slowpoke <mail+git@slowpoke.io>
 v1.0beta
+:doctype: manpage
 
 NAME
 ----
 git-task - an issue tracker for git repositories
+
+SYNOPSIS
+--------
+git-task [<task-warrior command>]
 
 DESCRIPTION
 -----------

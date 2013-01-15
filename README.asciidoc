@@ -1,12 +1,11 @@
 GIT-TASK(1)
 ===========
 slowpoke <mail+git@slowpoke.io>
-v0.1alpha
+v1.0beta
 
 NAME
 ----
 git-task - an issue tracker for git repositories
-
 
 DESCRIPTION
 -----------
@@ -23,3 +22,7 @@ to share a simple todo list with multiple people.
 To use this as a pseudo git-command, you can add an alias in your .gitconfig:
 
 	task = !path/to/git-task.sh
+
+SEE ALSO
+--------
+task(1)

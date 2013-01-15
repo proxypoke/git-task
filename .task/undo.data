@@ -1,0 +1,3 @@
+time 1358261952
+new [description:"git stash changes the ctime of files, which caues vim ( and probably other editors) to think the file has changed. Avoid this if possible." entry:"1358261952" priority:"M" project:"FIXME" status:"pending" uuid:"ce624d92-d34d-4519-80d7-aeff15bca8cc"]
+---

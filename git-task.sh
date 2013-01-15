@@ -28,57 +28,57 @@ current_branch () {
 
 # stash the current branch and remember its name
 prepare () {
-    echo "Preparing transaction..."
-    echo "Checking for .git directory..."
+	#echo "Preparing transaction..."
+	#echo "Checking for .git directory..."
     # TODO: currently only works in the git root directory.
     if [[ ! -d .git ]]; then
         error "Git dir not found. Is this the root directory of the repository?"
     fi
 
     # if this fails, something is horribly wrong.
-    echo "Stashing current branch..."
+	#echo "Stashing current branch..."
     git stash save --include-untracked \
         "git-task stash. You should never see this." &>/dev/null
     if [[ $? -ne 0 ]]; then
         error "[FATAL] Stashing failed, bailing out. Your working directory might be dirty."
     fi
 
-	echo "Checking out task-branch..."
-	git checkout ${_TASKBRANCH}
+	#echo "Checking out task-branch..."
+	git checkout  -q ${_TASKBRANCH}
 	if [[ $? -ne 0 ]]; then
-		echo "No task branch. Creating new orphan branch..."
-        git checkout --orphan "${_TASKBRANCH}" HEAD || rollback 1
-        echo "Unstaging everything..."
-        git rm --cached -r "*" || rollback 1
+		#echo "No task branch. Creating new orphan branch..."
+		git checkout -q --orphan "${_TASKBRANCH}" HEAD || rollback 1
+		#echo "Unstaging everything..."
+		git rm -q --cached -r "*" || rollback 1
 	fi
 
-    echo "Done preparing."
+	#echo "Done preparing."
 }
 
 task_commit () {
-    echo "Starting task transaction..."
-    echo "Recording task..."
+	#echo "Starting task transaction..."
+	#echo "Recording task..."
     TASKDATA=.task task $* || rollback 1
 
     # add and commit the changes
-    echo "Adding task to git..."
+	#echo "Adding task to git..."
     git add .task || rollback 1
-    echo "Committing task..."
-    git commit -m "$*" || rollback 1
-    echo "Transaction done."
+	#echo "Committing task..."
+	git commit -q -m "$*" || rollback 1
+	#echo "Transaction done."
 }
 
 rollback () {
-    echo "Rolling back..."
+	#echo "Rolling back..."
     # Since we stashed, there should™ be nothing that could go wrong here.
-    echo "Checking out working branch..."
+	#echo "Checking out working branch..."
 	git checkout -f ${_CURRENT} &>/dev/null
     if [[ $? -ne 0 ]]; then
         error "[FATAL] Couldn't rollback to previous state: checkout to ${_CURRENT} failed. There should be a stash with your uncommited changes."
     fi
-    echo "Applying the stash..."
-	git stash pop
-	echo "Done rolling back."
+	#echo "Applying the stash..."
+	git stash pop -q
+	#echo "Done rolling back."
 
     exit $1
 }

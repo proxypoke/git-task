@@ -4,3 +4,6 @@ new [description:"git stash changes the ctime of files, which caues vim ( and pr
 time 1358262097
 new [description:"Currently only works in the git root directory. Make it work in the entire repository." entry:"1358262097" priority:"L" project:"TODO" status:"pending" uuid:"dea01126-e9a6-465d-9efe-880804ac7434"]
 ---
+time 1358262156
+new [description:"Find a better way to store the current branch ( not a global variable)." entry:"1358262156" priority:"L" project:"TODO" status:"pending" uuid:"4e513266-223c-4e96-976d-ba542ba4a0b6"]
+---

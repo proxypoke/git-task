@@ -1,2 +1,3 @@
 [description:"git stash changes the ctime of files, which caues vim ( and probably other editors) to think the file has changed. Avoid this if possible." entry:"1358261952" priority:"M" project:"FIXME" status:"pending" uuid:"ce624d92-d34d-4519-80d7-aeff15bca8cc"]
 [description:"Currently only works in the git root directory. Make it work in the entire repository." entry:"1358262097" priority:"L" project:"TODO" status:"pending" uuid:"dea01126-e9a6-465d-9efe-880804ac7434"]
+[description:"Find a better way to store the current branch ( not a global variable)." entry:"1358262156" priority:"L" project:"TODO" status:"pending" uuid:"4e513266-223c-4e96-976d-ba542ba4a0b6"]

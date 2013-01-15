@@ -15,3 +15,6 @@ time 1358262247
 old [description:"Currently only works in the git root directory. Make it work in the entire repository." entry:"1358262097" priority:"L" project:"TODO" status:"pending" uuid:"dea01126-e9a6-465d-9efe-880804ac7434"]
 new [description:"Currently only works in the git root directory. Make it work in the entire repository." entry:"1358262097" priority:"M" project:"TODO" status:"pending" uuid:"dea01126-e9a6-465d-9efe-880804ac7434"]
 ---
+time 1358262949
+new [description:"There are still some diagnostic messages slipping through. Supress them." entry:"1358262949" priority:"L" project:"FIXME" status:"pending" uuid:"2d39755e-c648-4fdf-acd9-ab9f26d02fd4"]
+---

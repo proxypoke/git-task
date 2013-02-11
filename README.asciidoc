@@ -3,6 +3,7 @@ GIT-TASK(1)
 slowpoke <mail+git@slowpoke.io>
 v1.0beta
 :doctype: manpage
+:man source: Tinfoil Wizards Inc.
 
 NAME
 ----
@@ -30,4 +31,4 @@ To use this as a pseudo git-command, you can add an alias in your .gitconfig:
 
 SEE ALSO
 --------
-task(1)
+task(1), git(1)

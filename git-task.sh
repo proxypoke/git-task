@@ -8,10 +8,15 @@
 # files have changes. Find a way to avoid this, if possible.
 
 _TASKBRANCH="git-task"
+_DEBUG="true"
+
+log () {
+  echo $* >&1
+}
 
 error () {
-    echo $* >&2
-    exit 1
+  echo $* >&2
+  exit 1
 }
 
 branch_exists () {
@@ -28,59 +33,62 @@ current_branch () {
 
 # stash the current branch and remember its name
 prepare () {
-	#echo "Preparing transaction..."
-	#echo "Checking for .git directory..."
-    # TODO: currently only works in the git root directory.
-    if [[ ! -d .git ]]; then
-        error "Git dir not found. Is this the root directory of the repository?"
-    fi
+  $_DEBUG && log "Preparing transaction..."
+  $_DEBUG && log "Checking for .git directory..."
+  # TODO: currently only works in the git root directory.
+  _OLDDIR="$PWD"
+  cd $( git rev-parse --show-toplevel )
+  if [[ ! -d .git ]]; then
+    error "Git dir not found. Is this the root directory of the repository?"
+  fi
 
-    # if this fails, something is horribly wrong.
-	#echo "Stashing current branch..."
-    git stash save --include-untracked \
-        "git-task stash. You should never see this." &>/dev/null
-    if [[ $? -ne 0 ]]; then
-        error "[FATAL] Stashing failed, bailing out. Your working directory might be dirty."
-    fi
+  # if this fails, something is horribly wrong.
+  $_DEBUG && log "Stashing current branch..."
+  git stash save --include-untracked \
+    "git-task stash. You should never see this." &>/dev/null
+  if [[ $? -ne 0 ]]; then
+    error "[FATAL] Stashing failed, bailing out. Your working directory might be dirty."
+  fi
 
-	#echo "Checking out task-branch..."
-	git checkout  -q ${_TASKBRANCH}
-	if [[ $? -ne 0 ]]; then
-		#echo "No task branch. Creating new orphan branch..."
-		git checkout -q --orphan "${_TASKBRANCH}" HEAD || rollback 1
-		#echo "Unstaging everything..."
-		git rm -q --cached -r "*" || rollback 1
-	fi
+  $_DEBUG && log "Checking out task-branch..."
+  git checkout  -q ${_TASKBRANCH}
+  if [[ $? -ne 0 ]]; then
+    $_DEBUG && log "No task branch. Creating new orphan branch..."
+    git checkout -q --orphan "${_TASKBRANCH}" HEAD || rollback 1
+    $_DEBUG && log "Unstaging everything..."
+    git rm -q --cached -r "*" || rollback 1
+  fi
 
-	#echo "Done preparing."
+  cd $_OLDDIR
+  $_DEBUG && log "Done preparing."
 }
 
 task_commit () {
-	#echo "Starting task transaction..."
-	#echo "Recording task..."
-    TASKDATA=.task task $* || rollback 1
+  $_DEBUG && log "Starting task transaction..."
+  $_DEBUG && log "Recording task..."
+  TASKDATA=.task task $* || rollback 1
 
-    # add and commit the changes
-	#echo "Adding task to git..."
-    git add .task || rollback 1
-	#echo "Committing task..."
-	git commit -q -m "$*" || rollback 1
-	#echo "Transaction done."
+  # add and commit the changes
+  $_DEBUG && log "Adding task to git..."
+  git add .task .taskrc || rollback 1
+  $_DEBUG && log "Committing task..."
+  git commit -q -m "$*" || rollback 1
+  $_DEBUG && log "Transaction done."
 }
 
 rollback () {
-	#echo "Rolling back..."
+  $_DEBUG && log "Rolling back..."
     # Since we stashed, there should™ be nothing that could go wrong here.
-	#echo "Checking out working branch..."
-	git checkout -f ${_CURRENT} &>/dev/null
-    if [[ $? -ne 0 ]]; then
-        error "[FATAL] Couldn't rollback to previous state: checkout to ${_CURRENT} failed. There should be a stash with your uncommited changes."
-    fi
-	#echo "Applying the stash..."
-	git stash pop -q
-	#echo "Done rolling back."
+  $_DEBUG && log "Checking out working branch..."
+  git checkout -f ${_CURRENT} &>/dev/null
+  if [[ $? -ne 0 ]]; then
+    error "[FATAL] Couldn't rollback to previous state: checkout to ${_CURRENT} failed. There should be a stash with your uncommited changes."
+  fi
+  $_DEBUG && log "Applying the stash..."
+  git stash pop -q
+  $_DEBUG && log "Done rolling back."
 
-    exit $1
+  exit $1
 }
 
 # BEGIN SCRIPT
@@ -92,3 +100,5 @@ task_commit $*
 rollback
 
 exit 0
+
+# vim: ts=2 sw=2 sts=2 et :

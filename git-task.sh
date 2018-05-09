@@ -7,8 +7,9 @@
 # FIXME: git-stash changes the ctime of files. This causes vim to think that 
 # files have changes. Find a way to avoid this, if possible.
 
-_TASKBRANCH="git-task"
-_DEBUG="true"
+_TASKBRANCH="${TASKBRANCH:-tasks}"
+_DEBUG="false"
+TASK="/usr/local/bin/task"
 
 log () {
   echo $* >&1
@@ -40,8 +41,11 @@ prepare () {
   cd $( git rev-parse --show-toplevel )
   if [[ ! -d .git ]]; then
     error "Git dir not found. Is this the root directory of the repository?"
+    exit 1
   fi
 
+  # source env file if exists
+  [ -f ${_TASKBRANCH}.config ] && source ./${_TASKBRANCH}.config
   # if this fails, something is horribly wrong.
   $_DEBUG && log "Stashing current branch..."
   git stash save --include-untracked \
@@ -66,11 +70,10 @@ prepare () {
 task_commit () {
   $_DEBUG && log "Starting task transaction..."
   $_DEBUG && log "Recording task..."
-  TASKDATA=.task task $* || rollback 1
-
+  TASKDATA=.task $TASK $* || rollback 1
   # add and commit the changes
   $_DEBUG && log "Adding task to git..."
-  git add .task .taskrc || rollback 1
+  git add .task || rollback 1
   $_DEBUG && log "Committing task..."
   git commit -q -m "$*" || rollback 1
   $_DEBUG && log "Transaction done."
@@ -78,7 +81,7 @@ task_commit () {
 
 rollback () {
   $_DEBUG && log "Rolling back..."
-    # Since we stashed, there should™ be nothing that could go wrong here.
+  # Since we stashed, there should™ be nothing that could go wrong here.
   $_DEBUG && log "Checking out working branch..."
   git checkout -f ${_CURRENT} &>/dev/null
   if [[ $? -ne 0 ]]; then

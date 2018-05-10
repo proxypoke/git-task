@@ -8,8 +8,7 @@
 # files have changes. Find a way to avoid this, if possible.
 
 _TASKBRANCH="${TASKBRANCH:-tasks}"
-_DEBUG="false"
-TASK="/usr/local/bin/task"
+_DEBUG="${DEBUG:-false}"
 
 log () {
   echo $* >&1
@@ -70,7 +69,7 @@ prepare () {
 task_commit () {
   $_DEBUG && log "Starting task transaction..."
   $_DEBUG && log "Recording task..."
-  TASKDATA=.task $TASK $* || rollback 1
+  TASKDATA=.task task $* || rollback 1
   # add and commit the changes
   $_DEBUG && log "Adding task to git..."
   git add .task || rollback 1
